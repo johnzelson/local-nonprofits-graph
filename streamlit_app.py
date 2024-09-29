@@ -55,6 +55,7 @@ def simple_graph(all_people_df):
     d3.graph(adjmat)
     #d3.show(filepath='data/g1.html')
     d3.show()
+    st.write ("hey finished a graph")
 
 def by_emphasis_graph(all_people_df):
     
@@ -78,6 +79,9 @@ def by_emphasis_graph(all_people_df):
     d3.graph(adjmat)
     #d3.show(filepath='data/g1.html')
     d3.show()
+    st.write ("hey finished a graph")
+
+
 
 def people_by_emphasis_graph(all_people_df):
     
@@ -102,7 +106,7 @@ def people_by_emphasis_graph(all_people_df):
     #d3.show(filepath='data/g1.html')
     d3.show()
 
-
+    st.write ("hey finished a graph")
 
 
 

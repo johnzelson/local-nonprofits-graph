@@ -23,7 +23,8 @@ def main():
     
     """
  
-    with open('data/g1.html',encoding="utf8") as f:
+    # with open('data/g1.html',encoding="utf8") as f:
+    with open('data/g1.html', "rb") as f:
         html_data = f.read()
         
     # Show in webpage

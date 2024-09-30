@@ -109,8 +109,9 @@ def people_by_emphasis_graph(df):
     # Build force-directed graph with default settings
     d3.graph(adjmat)
     #d3.show(filepath='data/g1.html')
-    d3.show()
-    
+    #d3.show()
+    d3.show('./data/ppl_emph.html')
+
 
 def main():
     st.set_page_config(APP_TITLE, layout="wide")

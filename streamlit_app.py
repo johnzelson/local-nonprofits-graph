@@ -148,7 +148,9 @@ def main():
 
         with open('data/g1.html', "rb") as f:
             html_data = f.read()
-        st.components.v1.html(html_data, scrolling=True, width=1000, height=800)  
+    
+        with st.expander("graph"):
+            st.components.v1.html(html_data, scrolling=True, width=900, height=800)  
 
     elif which_graph == 'By Emphasis Area':
         by_emphasis_graph(all_people_df)

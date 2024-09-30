@@ -110,7 +110,7 @@ def people_by_emphasis_graph(df):
     d3.graph(adjmat)
     #d3.show(filepath='data/g1.html')
     #d3.show()
-    d3.show('./data/ppl_emph.html')
+    d3.show(filepath='data/ppl_emph.html')
 
 
 def main():

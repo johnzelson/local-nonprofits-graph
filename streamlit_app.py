@@ -53,8 +53,9 @@ def simple_graph(all_people_df):
 
     # Build force-directed graph with default settings
     d3.graph(adjmat)
-    #d3.show(filepath='data/g1.html')
-    d3.show()
+    d3.show(filepath='data/g1.html')
+    #d3.show()
+    
     st.write ("hey finished a graph")
 
 def by_emphasis_graph(all_people_df):
@@ -77,8 +78,8 @@ def by_emphasis_graph(all_people_df):
 
     # Build force-directed graph with default settings
     d3.graph(adjmat)
-    #d3.show(filepath='data/g1.html')
-    d3.show()
+    d3.show(filepath='data/g1.html')
+    #d3.show()
     st.write ("hey finished a graph")
 
 
@@ -104,8 +105,8 @@ def people_by_emphasis_graph(all_people_df):
     # Build force-directed graph with default settings
     d3.graph(adjmat)
     #d3.show(filepath='data/g1.html')
-    d3.show()
-
+    #d3.show()
+    d3.show(filepath='data/g1.html')
     st.write ("hey finished a graph")
 
 
@@ -144,11 +145,19 @@ def main():
 
     if which_graph == 'All':
         simple_graph(all_people_df)
+
+        with open('data/g1.html', "rb") as f:
+            html_data = f.read()
+        st.components.v1.html(html_data, scrolling=True, width=1000, height=800)  
+
     elif which_graph == 'By Emphasis Area':
         by_emphasis_graph(all_people_df)
     
     elif which_graph == 'People by Emphasis':
         people_by_emphasis_graph(all_people_df)
+
+
+
 
     # using example
     # https://github.com/snehankekre/streamlit-d3graph/blob/main/examples/example.py

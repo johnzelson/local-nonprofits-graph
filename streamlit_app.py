@@ -1,7 +1,7 @@
 import streamlit as st
-from streamlit_d3graph import d3graph
+from streamlit_d3graph import d3graph, vec2adjmat
 import pandas as pd
-from d3graph import d3graph, vec2adjmat
+# from d3graph import d3graph, vec2adjmat
 
 def get_people_df():
 

@@ -73,11 +73,15 @@ def graph_seven(adjmat, df, label, node_size):
     return d3
 
 
+
 d3, adjmat, df, label, node_size = init_graph()
+
 
 d3 = graph_one(d3, adjmat, df, label, node_size)
 d3.show()
 
+
+"""
 d3 = graph_two(d3, adjmat, df, label, node_size)
 d3.show()
 
@@ -95,3 +99,5 @@ d3.show()
 
 d3 = graph_seven(adjmat, df, label, node_size)
 d3.show()
+
+"""

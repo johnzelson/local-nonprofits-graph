@@ -33,14 +33,73 @@ def get_people_df():
     return all_people_df
 
 
-def orgs_people(all_people_df):
+# test graph
+def orgs_blue(df, charge, width, height):
+
+
+    source = []
+    target =[]
+    weight = []
+    
+    #for index, row in all_people_df.head(50).iterrows():
+    for index, row in df.iterrows():
+        source.append(row['NAME'])
+        target.append(row['PersonNm'])
+        weight.append(1)
+        
+    # Create adjacency matrix
+    adjmat = vec2adjmat(source, target, weight=weight)
+
+    # Initialize
+    d3 = d3graph(charge=charge)
+
+    # Build force-directed graph with default settings
+    d3.graph(adjmat)
+
+    # TODO: this should be a seperate def
+    # list of unique people, org names/nodes
+    orgs = df['NAME'].unique()
+    ppl = df['PersonNm'].unique()
+
+    for org in orgs:
+        org_id = org.replace(" ", "_")
+
+        # Customize the properties of one specific node
+        #d3.node_properties['org']['label']='Penny Hofstadter'
+       
+        # set these       
+        d3.node_properties[org_id]['color']="#92b4f0" # 'blue' 
+        d3.node_properties[org_id]['size']=15
+        d3.node_properties[org_id]['fontsize']=14
+        d3.node_properties[org_id]['fontcolor']="#150db8" #"blue"
+        #d3.node_properties['Penny']['edge_size']=5
+        #d3.node_properties['Penny']['edge_color']='#0000ff' # Blue
+
+    for person in ppl:
+        person_id = person.replace(" ", "_")
+        person_label = person.title()
+        #st.write (org)
+        # Customize the properties of one specific node
+        #d3.node_properties['org']['label']='Penny Hofstadter'
+       
+        # set these       
+        d3.node_properties[person_id]['label']=person_label
+        d3.node_properties[person_id]['color']='green' #'#2200FF' 
+        d3.node_properties[person_id]['size']=10
+        d3.node_properties[person_id]['fontcolor']='black'
+
+    #d3.show(filepath='data/g1.html')
+    d3.show(figsize=[width, height])
+
+
+def orgs_people(df, charge, width, height):
     
     source = []
     target =[]
     weight = []
     
     #for index, row in all_people_df.head(50).iterrows():
-    for index, row in all_people_df.iterrows():
+    for index, row in df.iterrows():
         source.append(row['NAME'])
         target.append(row['PersonNm'])
         weight.append(1)
@@ -54,10 +113,43 @@ def orgs_people(all_people_df):
     # Build force-directed graph with default settings
     d3.graph(adjmat)
     #d3.show(filepath='data/g1.html')
-    d3.show()
+
+    # TODO: this should be a seperate def
+    # list of unique people, org names/nodes
+    orgs = df['NAME'].unique()
+    ppl = df['PersonNm'].unique()
+
+    for org in orgs:
+        org_id = org.replace(" ", "_")
+
+        # Customize the properties of one specific node
+        #d3.node_properties['org']['label']='Penny Hofstadter'
+       
+        # set these       
+        d3.node_properties[org_id]['color']="#92b4f0" # 'blue' 
+        d3.node_properties[org_id]['size']=15
+        d3.node_properties[org_id]['fontsize']=14
+        d3.node_properties[org_id]['fontcolor']="#150db8" #"blue"
+        #d3.node_properties['Penny']['edge_size']=5
+        #d3.node_properties['Penny']['edge_color']='#0000ff' # Blue
+
+    for person in ppl:
+        person_id = person.replace(" ", "_")
+        person_label = person.title()
+        #st.write (org)
+        # Customize the properties of one specific node
+        #d3.node_properties['org']['label']='Penny Hofstadter'
+       
+        # set these       
+        d3.node_properties[person_id]['label']=person_label
+        d3.node_properties[person_id]['color']='green' #'#2200FF' 
+        d3.node_properties[person_id]['size']=10
+        d3.node_properties[person_id]['fontcolor']='black'
+
+    d3.show(figsize=[width, height])
     
 
-def orgs_emphasis_graph(df):
+def orgs_emphasis_graph(df, charge, width, height):
     
     source = []
     target =[]
@@ -81,18 +173,50 @@ def orgs_emphasis_graph(df):
     # Build force-directed graph with default settings
     d3.graph(adjmat)
     #d3.show(filepath='data/g1.html')
-    d3.show()
+    #d3.show()
+
+    # TODO: this should be a seperate def
+    # list of unique people, org names/nodes
+    ntee_cats = df[filt]['ntee_cat'].unique()
+    orgs = df[filt]['NAME'].unique()
+
+    for ntee in ntee_cats:
+        ntee_id =ntee.replace(" ", "_")
+
+        # Customize the properties of one specific node
+        #d3.node_properties['org']['label']='Penny Hofstadter'
+       
+        # set these       
+        d3.node_properties[ntee_id]['color']="#c9801a" # orangish 
+        d3.node_properties[ntee_id]['size']=15
+        d3.node_properties[ntee_id]['fontsize']=14
+        d3.node_properties[ntee_id]['fontcolor']="#784908" 
+        #d3.node_properties['Penny']['edge_size']=5
+        #d3.node_properties['Penny']['edge_color']='#0000ff' # Blue
+
+    for org in orgs:
+        org_id = org.replace(" ", "_")
+        org_label = org.title()
+        #st.write (org)
+        # Customize the properties of one specific node
+        #d3.node_properties['org']['label']='Penny Hofstadter'
+       
+        # set these       
+        d3.node_properties[org_id]['label']=org_label
+        d3.node_properties[org_id]['color']='green' #'#2200FF' 
+        d3.node_properties[org_id]['size']=10
+        d3.node_properties[org_id]['fontcolor']='black'
+
+    d3.show(figsize=[width, height])
 
 
-def people_by_emphasis_graph(df):
+def people_by_emphasis_graph(df, charge, width, height):
     
     source = []
     target =[]
     weight = []
 
-
     filt = df['ntee_cat'] != 'no_NTEE'
-
 
     #for index, row in all_people_df.head(50).iterrows():
     for index, row in df[filt].iterrows():
@@ -108,10 +232,43 @@ def people_by_emphasis_graph(df):
 
     # Build force-directed graph with default settings
     d3.graph(adjmat)
-    #d3.show(filepath='data/g1.html')
-    d3.show()
-    #d3.show(filepath='data/ppl_emph.html')
 
+    ntee_cats = df[filt]['ntee_cat'].unique()
+    ppl = df[filt]['PersonNm'].unique()
+
+    for person in ppl:
+        person_id = person.replace(" ", "_")
+        person_label = person.title()
+        #st.write (org)
+        # Customize the properties of one specific node
+        #d3.node_properties['org']['label']='Penny Hofstadter'
+       
+        # set these       
+        d3.node_properties[person_id]['label']=person_label
+        d3.node_properties[person_id]['color']='green' #'#2200FF' 
+        d3.node_properties[person_id]['size']=10
+        d3.node_properties[person_id]['fontcolor']='black'
+
+    for ntee in ntee_cats:
+        ntee_id =ntee.replace(" ", "_")
+
+        # Customize the properties of one specific node
+        #d3.node_properties['org']['label']='Penny Hofstadter'
+       
+        # set these       
+        d3.node_properties[ntee_id]['color']="#c9801a" # orangish 
+        d3.node_properties[ntee_id]['size']=15
+        d3.node_properties[ntee_id]['fontsize']=14
+        d3.node_properties[ntee_id]['fontcolor']="#784908" 
+        #d3.node_properties['Penny']['edge_size']=5
+        #d3.node_properties['Penny']['edge_color']='#0000ff' # Blue
+
+
+    #d3.show(filepath='data/g1.html')
+    #d3.show(filepath='ppl_emph.html')
+    # d3.show(figsize=[1500, 800], title= 'PPl_Emphs', filepath='d3graph.html')
+    d3.show(figsize=[width, height])
+    # d3.show(filepath='data/bigbang.html', notebook=False)
 
 def main():
     st.set_page_config(APP_TITLE, layout="wide")
@@ -119,6 +276,14 @@ def main():
     #st.caption(APP_SUB_TITLE)
 
 
+    # load people data
+    all_people_df = get_people_df()
+
+    height=800
+    width=1100
+
+
+    # select graph in sidebar
     with st.sidebar:
         msg = """
         ## Visualize Affiliations 
@@ -129,35 +294,75 @@ def main():
 
         Double-click on node to focus
         
+        - People are green
+        - Orgs are blue
+        - Emphasis Areas are orange-ish
+
         """
 
         st.markdown(msg)
 
-        options = ["", "Orgs and People", "Orgs and Emphasis Area", "People by Emphasis"]
+        with st.expander("Chart Options"):
+
+            charge = st.slider("charge", 100, 300, value=200, 
+                            help="Edge length of the network.  Lower number is denser network.")
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                #st.number_input(label, min_value=None, max_value=None, value="min", 
+                #                step=None, format=None, key=None, help=None, on_change=None, 
+                #                args=None, kwargs=None, *, placeholder=None, 
+                #                disabled=False, label_visibility="visible")
+
+                width = st.number_input("Width", min_value=300, max_value=1300, value=width,
+                                step=50, help="Width of Graph")
+            with col2:
+ 
+                height = st.number_input("Height", min_value=300, max_value=1300, value=height,
+                step=50, help="Height of Graph")
+
+
+            msg_chart = f"""Debug |
+            Charge: {charge}
+            Width:  {width}
+            Height: {height}
+    
+            """
+
+            st.write (msg_chart)
+
+
+        options = ["", 
+                   "Orgs and People", 
+                   "Orgs and Emphasis Area", 
+                   "People and Emphasis Area", 
+                   "Testing"]
+
         which_graph = st.selectbox("Pick Graph", options, index=0, key="select_graph",  
                     on_change=None)
 
-        st.write(which_graph)
+        #st.write(which_graph)
+        #st.write(charge)
 
-
-
-    all_people_df = get_people_df()
-
-
-    #st.selectbox(label, options, index=0, format_func=special_internal_function, key=None, help=None, 
-    #             on_change=None, args=None, kwargs=None, *, placeholder="Choose an option", 
-    #             disabled=False, label_visibility="visible")
+        #st.selectbox(label, options, index=0, format_func=special_internal_function, key=None, help=None, 
+        #             on_change=None, args=None, kwargs=None, *, placeholder="Choose an option", 
+        #             disabled=False, label_visibility="visible")
 
 
 
     if which_graph == 'Orgs and People':            
-        orgs_people(all_people_df)
+        orgs_people(all_people_df, charge, width, height)
         
     elif which_graph == 'Orgs and Emphasis Area':
-        orgs_emphasis_graph(all_people_df)
+        orgs_emphasis_graph(all_people_df, charge, width, height)
     
-    elif which_graph == 'People by Emphasis':
-        people_by_emphasis_graph(all_people_df)
+    elif which_graph == 'People and Emphasis Area':
+        people_by_emphasis_graph(all_people_df, charge, width, height)
+
+    elif which_graph == 'Testing':
+        orgs_blue(all_people_df, charge, width, height)
+
 
     # using example
     # https://github.com/snehankekre/streamlit-d3graph/blob/main/examples/example.py

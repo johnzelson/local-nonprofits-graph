@@ -92,7 +92,68 @@ def orgs_blue(df, charge, width, height):
     d3.show(figsize=[width, height])
 
 
-def orgs_people(df, charge, width, height):
+def people_with_multiple_connections(df_in, charge, width, height):
+
+    df = df_in[df_in['PersonNm'].groupby(df_in['PersonNm']).transform('size')>1]
+
+    source = []
+    target =[]
+    weight = []
+    
+    #for index, row in all_people_df.head(50).iterrows():
+    for index, row in df.iterrows():
+        source.append(row['NAME'])
+        target.append(row['PersonNm'])
+        weight.append(1)
+        
+    # Create adjacency matrix
+    adjmat = vec2adjmat(source, target, weight=weight)
+
+    # Initialize
+    d3 = d3graph()
+
+    # Build force-directed graph with default settings
+    d3.graph(adjmat)
+    #d3.show(filepath='data/g1.html')
+
+    # TODO: this should be a seperate def
+    # list of unique people, org names/nodes
+    orgs = df['NAME'].unique()
+    ppl = df['PersonNm'].unique()
+
+    for org in orgs:
+        org_id = org.replace(" ", "_")
+
+        # Customize the properties of one specific node
+        #d3.node_properties['org']['label']='Penny Hofstadter'
+       
+        # set these       
+        d3.node_properties[org_id]['color']="#92b4f0" # 'blue' 
+        d3.node_properties[org_id]['size']=15
+        d3.node_properties[org_id]['fontsize']=14
+        d3.node_properties[org_id]['fontcolor']="#150db8" #"blue"
+        #d3.node_properties['Penny']['edge_size']=5
+        #d3.node_properties['Penny']['edge_color']='#0000ff' # Blue
+
+    for person in ppl:
+        person_id = person.replace(" ", "_")
+        person_label = person.title()
+        #st.write (org)
+        # Customize the properties of one specific node
+        #d3.node_properties['org']['label']='Penny Hofstadter'
+       
+        # set these       
+        d3.node_properties[person_id]['label']=person_label
+        d3.node_properties[person_id]['color']='green' #'#2200FF' 
+        d3.node_properties[person_id]['size']=10
+        d3.node_properties[person_id]['fontcolor']='black'
+
+    d3.show(figsize=[width, height], show_slider=False)
+    
+
+
+
+def orgs_to_people(df, charge, width, height):
     
     source = []
     target =[]
@@ -146,10 +207,10 @@ def orgs_people(df, charge, width, height):
         d3.node_properties[person_id]['size']=10
         d3.node_properties[person_id]['fontcolor']='black'
 
-    d3.show(figsize=[width, height])
+    d3.show(figsize=[width, height], show_slider=False)
     
 
-def orgs_emphasis_graph(df, charge, width, height):
+def orgs_to_emphasis(df, charge, width, height):
     
     source = []
     target =[]
@@ -207,10 +268,10 @@ def orgs_emphasis_graph(df, charge, width, height):
         d3.node_properties[org_id]['size']=10
         d3.node_properties[org_id]['fontcolor']='black'
 
-    d3.show(figsize=[width, height])
+    d3.show(figsize=[width, height], show_slider=False)
 
 
-def people_by_emphasis_graph(df, charge, width, height):
+def people_to_emphasis(df, charge, width, height):
     
     source = []
     target =[]
@@ -225,6 +286,7 @@ def people_by_emphasis_graph(df, charge, width, height):
         weight.append(1)
         
     # Create adjacency matrix
+    # Note: this must automatically replace spaces with underscore?
     adjmat = vec2adjmat(source, target, weight=weight)
 
     # Initialize
@@ -267,8 +329,19 @@ def people_by_emphasis_graph(df, charge, width, height):
     #d3.show(filepath='data/g1.html')
     #d3.show(filepath='ppl_emph.html')
     # d3.show(figsize=[1500, 800], title= 'PPl_Emphs', filepath='d3graph.html')
+    
+    # add title to edges, too cluttered, tho
+    #for index, row in df[filt].iterrows():
+    #    person_id = row['PersonNm'].replace(" ", "_")
+    #    ntee_id =row['ntee_cat'].replace(" ", "_")
+    #    d3.edge_properties[(person_id, ntee_id)]['label']=row['TitleTxt']   
+
+    
     d3.show(figsize=[width, height])
     # d3.show(filepath='data/bigbang.html', notebook=False)
+
+    
+    # st.table(d3.edge_properties)
 
 def main():
     st.set_page_config(APP_TITLE, layout="wide")
@@ -287,16 +360,22 @@ def main():
     with st.sidebar:
         msg = """
         ## Visualize Affiliations 
+
+        Directors, Officers, and IRS Contact people connected to Organizations, as listed on IRS documents.
+
+        - People are green
+        - Orgs are blue
+        -Organization Emphasis Areas are orange-ish
+
         
         Minimize/Expand sidebar:
         - Mouse over sidebar
         - Use  **<** and **>**  in upper right of sidebar
 
-        Double-click on node to focus
+        Double-click on node to focus on selected node and connections only.
         
-        - People are green
-        - Orgs are blue
-        - Emphasis Areas are orange-ish
+
+        Zoom using "Pinch" or scroll wheel.
 
         """
 
@@ -334,9 +413,10 @@ def main():
 
 
         options = ["", 
-                   "Orgs and People", 
-                   "Orgs and Emphasis Area", 
-                   "People and Emphasis Area", 
+                   "Orgs to People", 
+                   "Orgs to Emphasis Area", 
+                   "People to Emphasis Area",
+                   "People with Multiple Connections", 
                    "Testing"]
 
         which_graph = st.selectbox("Pick Graph", options, index=0, key="select_graph",  
@@ -351,14 +431,17 @@ def main():
 
 
 
-    if which_graph == 'Orgs and People':            
-        orgs_people(all_people_df, charge, width, height)
+    if which_graph == 'Orgs to People':            
+        orgs_to_people(all_people_df, charge, width, height)
         
-    elif which_graph == 'Orgs and Emphasis Area':
-        orgs_emphasis_graph(all_people_df, charge, width, height)
+    elif which_graph == 'Orgs to Emphasis Area':
+        orgs_to_emphasis(all_people_df, charge, width, height)
     
-    elif which_graph == 'People and Emphasis Area':
-        people_by_emphasis_graph(all_people_df, charge, width, height)
+    elif which_graph == 'People to Emphasis Area':
+        people_to_emphasis(all_people_df, charge, width, height)
+
+    elif which_graph == 'People with Multiple Connections':
+        people_with_multiple_connections(all_people_df, charge, width, height)
 
     elif which_graph == 'Testing':
         orgs_blue(all_people_df, charge, width, height)

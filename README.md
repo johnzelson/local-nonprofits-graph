@@ -1,6 +1,3 @@
-# local_nonprofits_graph
-Graphing People and Connections in local nonprofits
-
 # Local Nonprofits (App in DRAFT)
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://johnzelson-local-nonprofits-graph-streamlit-app-zuq6hl.streamlit.app/)
